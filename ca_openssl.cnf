@@ -1,0 +1,20 @@
+[req]
+default_bits       = 2048
+default_md         = sha256
+prompt             = no
+distinguished_name = dn
+x509_extensions    = v3_ca
+
+[dn]
+C = TR
+ST = Istanbul
+L = Istanbul
+O = Bilus
+OU = Development
+CN = Bilus Root CA
+
+[v3_ca]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = CA:TRUE
+keyUsage = critical, keyCertSign, cRLSign

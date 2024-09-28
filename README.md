@@ -89,6 +89,15 @@ certificate.
 
 ---
 
+## Usage
+
+Clone the repo;
+
+```bash
+git clone https://github.com/bilusteknoloji/reverse-ssl-pinning-demo
+cd reverse-ssl-pinning-demo/
+```
+
 ## Run Server
 
 ```bash
@@ -110,7 +119,10 @@ go run cmd/server/main.go -h    # see command-line args
 
 ## Client Request with `go`
 
+Now, open another terminal tab and `cd` to cloned repo location.
+
 ```bash
+cd reverse-ssl-pinning-demo/
 go run cmd/client/main.go       # make request to local server with defaults
 go run cmd/client/main.go -h    # see command-line args
 
@@ -129,7 +141,10 @@ go run cmd/client/main.go -h    # see command-line args
 
 ## Client Request with `curl`
 
+Now, open another terminal tab and `cd` to cloned repo location.
+
 ```bash
+cd reverse-ssl-pinning-demo/
 curl --cacert certs/server/server-cert.pem \
      --cert certs/client/client-cert-signed.pem \
      --key certs/client/client-key.pem \
@@ -140,9 +155,10 @@ curl --cacert certs/server/server-cert.pem \
 
 ## Extras; `python` Client Request
 
-First, check your `python` version:
+Open another terminal tab and `cd` to cloned repo location, check your `python` version:
 
 ```bash
+cd reverse-ssl-pinning-demo/
 python --version
 # mine is Python 3.12.2
 ```

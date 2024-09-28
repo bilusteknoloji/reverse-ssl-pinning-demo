@@ -1,4 +1,4 @@
-![Version](https://img.shields.io/badge/version-0.0.0-orange.svg)
+![Version](https://img.shields.io/badge/version-0.0.1-orange.svg)
 [![Golang CI Lint](https://github.com/bilusteknoloji/reverse-ssl-pinning-demo/actions/workflows/golangci-lint.yml/badge.svg)](https://github.com/bilusteknoloji/reverse-ssl-pinning-demo/actions/workflows/golangci-lint.yml)
 ![Powered by Rake](https://img.shields.io/badge/powered_by-rake-blue?logo=ruby)
 

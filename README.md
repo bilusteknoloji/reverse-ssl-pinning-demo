@@ -12,6 +12,34 @@ are **allowed** to communicate with the server.
 
 This is a super basic approach to ssl reverse pinning approach.
 
+## Client-Server SSL Reverse Pinning Flow
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Server
+
+    Client->>Server: Initiates connection (Hello)
+    Server->>Client: Requests client certificate
+    Client->>Server: Sends client certificate
+    Server->>Server: Verifies client certificate
+    alt Certificate valid
+        Server->>Client: Connection accepted (Handshake)
+    else Certificate invalid
+        Server->>Client: Connection rejected (Terminate)
+    end
+```
+
+## Certificate Validation Process
+
+```mermaid
+flowchart TD
+    A[Client Sends Certificate] --> B{Is the Certificate Valid?}
+    B -- Yes --> C[Allow Access]
+    B -- No --> D[Terminate Connection]
+    C --> E[Proceed with Encrypted Communication]
+```
+
 ---
 
 ## Requirements
@@ -39,23 +67,42 @@ You can create your own keys and certificates!
 
 ```bash
 # CA certificate
-openssl req -new -newkey rsa:2048 -nodes -x509 -days 365 -keyout certs/client/client-ca-key.pem -out certs/client/client-ca.pem -config ca_openssl.cnf
+openssl req -new -newkey rsa:4096 -nodes -x509 -days 365 \
+    -keyout certs/client/client-ca-key.pem \
+    -out certs/client/client-ca.pem \
+    -config ca_openssl.cnf
 
 # Server Key and CSR
-openssl req -new -newkey rsa:2048 -nodes -keyout certs/server/server-key.pem -out certs/server/server-cert.csr -config openssl.cnf
+openssl req -new -newkey rsa:4096 -nodes \
+    -keyout certs/server/server-key.pem \
+    -out certs/server/server-cert.csr \
+    -config openssl.cnf
 
 # Sign the Server CSR with CA
-openssl x509 -req -in certs/server/server-cert.csr -CA certs/client/client-ca.pem -CAkey certs/client/client-ca-key.pem -CAcreateserial -out certs/server/server-cert.pem -days 365 -extensions req_ext -extfile openssl.cnf
-# Certificate request self-signature ok
-# subject=C=TR, ST=Istanbul, L=Istanbul, O=Bilus, OU=Development, CN=localhost
+openssl x509 -req -in \
+    certs/server/server-cert.csr \
+    -CA certs/client/client-ca.pem \
+    -CAkey certs/client/client-ca-key.pem \
+    -CAcreateserial -out certs/server/server-cert.pem \
+    -days 365 \
+    -extensions req_ext -extfile openssl.cnf
+
 
 # Client Key and CSR
-openssl req -new -newkey rsa:2048 -nodes -keyout certs/client/client-key.pem -out certs/client/client-cert.csr -config openssl.cnf
+openssl req -new -newkey rsa:4096 -nodes \
+    -keyout certs/client/client-key.pem \
+    -out certs/client/client-cert.csr \
+    -config openssl.cnf
+
 
 # Sign the Client CSR with CA
-openssl x509 -req -in certs/client/client-cert.csr -CA certs/client/client-ca.pem -CAkey certs/client/client-ca-key.pem -CAcreateserial -out certs/client/client-cert-signed.pem -days 365 -extensions req_ext -extfile openssl.cnf
-# Certificate request self-signature ok
-# subject=C=TR, ST=Istanbul, L=Istanbul, O=Bilus, OU=Development, CN=localhost
+openssl x509 -req \
+    -in certs/client/client-cert.csr \
+    -CA certs/client/client-ca.pem \
+    -CAkey certs/client/client-ca-key.pem \
+    -CAcreateserial -out certs/client/client-cert-signed.pem \
+    -days 365 \
+    -extensions req_ext -extfile openssl.cnf
 ```
 
 Now check your certificate:

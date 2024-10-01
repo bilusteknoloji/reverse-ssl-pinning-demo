@@ -34,7 +34,12 @@ func main() {
 	tlsConfig := &tls.Config{
 		ClientCAs:  clientCAPool,
 		ClientAuth: tls.RequireAndVerifyClientCert,
-		MinVersion: tls.VersionTLS12,
+		MinVersion: tls.VersionTLS13,
+		CipherSuites: []uint16{
+			tls.TLS_AES_128_GCM_SHA256,
+			tls.TLS_AES_256_GCM_SHA384,
+			tls.TLS_CHACHA20_POLY1305_SHA256,
+		},
 	}
 
 	server := &http.Server{
